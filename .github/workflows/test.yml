@@ -1,0 +1,35 @@
+name: Run Jest Tests
+
+on:
+  push:
+    branches:
+      - master 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Clean HTML report
+        run: rm -rf html-report
+
+      - name: Run Jest tests and generate HTML report
+        run: npm test
+
+      - name: Upload HTML report artifact
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: html-report
+          path: html-report
